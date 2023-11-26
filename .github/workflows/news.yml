@@ -9,6 +9,7 @@ jobs:
 
     env:
       NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      LASTMILEAI_API_KEY: ${{ secrets.LASTMILEAI_API_KEY }}
 
     steps:
       - name: Checkout Repository
