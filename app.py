@@ -17,8 +17,8 @@ def chat_completions():
     messages = data['messages']
     completion = lastmile.create_openai_chat_completion(
       completion_params = {
-        model: "gpt-4",
-        messages: messages,
+        'model': "gpt-4",
+        'messages': messages,
       }
     )
     return completion
