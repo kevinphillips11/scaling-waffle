@@ -21,7 +21,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Start ngrok
+        run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
+
       - name: Run App Forever
         run: |
           nohup python app.py &  # Run app in the background
           echo $! > app_pid.txt  # Save the process ID to a file for later reference
+
+      - name: Keep Workflow Running
+        run: |
+          while true; do
+            sleep 1m  # Sleep for 1 minute (adjust as needed)
+          done
