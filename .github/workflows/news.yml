@@ -42,3 +42,4 @@ jobs:
         run: |
           nohup python app.py &  # Run app in the background
           echo $! > app_pid.txt  # Save the process ID to a file for later reference
+          sleep infinity  # Sleep indefinitely to keep the workflow running
