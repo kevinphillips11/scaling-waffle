@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top Headlines</h1>
+    <ul>
+        {% for article in articles %}
+        <li>
+            <h2>{{ article.title }}</h2>
+            {% if article.urlToImage %}
+                <img src="{{ article.urlToImage }}" alt="{{ article.title }}" width="300" height="200">
+            {% endif %}
+            <p>{{ article.description }}</p>
+            <p><a href="{{ article.url }}" target="_blank">Read more</a></p>
+        </li>
+    {% endfor %}
+        </ul>
+</body>
+</html>
