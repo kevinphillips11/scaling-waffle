@@ -21,7 +21,8 @@ def chat_completions():
         'messages': messages,
       }
     )
-    return completion
+    return completion["completionResponse"]["choices"][0]["message"]["content"]
+
 
 @app.route('/')
 def index():
