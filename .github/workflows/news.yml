@@ -41,3 +41,6 @@ jobs:
 
       - name: Run App Forever
         run: nohup python app.py &
+
+      - name: Sleep Forever
+        run: sleep infinity
