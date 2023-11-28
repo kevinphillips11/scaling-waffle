@@ -1,0 +1,17 @@
+name: Trigger news.yml Workflow
+
+on:
+  workflow_run:
+    workflows:
+      - "news.yml"
+    types:
+      - completed
+
+jobs:
+  trigger_run_yml_manually:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger "news.yml" workflow manually
+        uses: actions/workflow-dispatch@v2
+        with:
+          workflow: news.yml
