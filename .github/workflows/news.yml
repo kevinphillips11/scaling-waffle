@@ -11,8 +11,6 @@ jobs:
       NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
       LASTMILEAI_API_KEY: ${{ secrets.LASTMILEAI_API_KEY }}
 
-    timeout-minutes: 305  # Set the total execution time for the job
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -42,15 +40,4 @@ jobs:
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
       - name: Run App Forever
-        run: |
-          nohup python app.py &  # Run app in the background
-          echo $! > app_pid.txt  # Save the process ID to a file for later reference
-          sleep infinity  # Sleep indefinitely to keep the workflow running
-
-  trigger-workflow:
-    needs: run-app
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Workflow Again
-        run: |
-          gh workflow run news.yml --token ${{ secrets.GITHUB_TOKEN }}
+        run: nohup python app.py &
