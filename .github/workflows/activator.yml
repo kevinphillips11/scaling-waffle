@@ -12,8 +12,10 @@ jobs:
   trigger_news_yml:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger "news.yml" workflow
-        uses: actions/workflow-dispatch@v2
-        with:
-          workflow: news.yml
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Trigger "news.yml" workflow manually
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/news.yml/dispatches \
+            -d '{"ref": "main"}'
