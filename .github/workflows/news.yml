@@ -46,4 +46,4 @@ jobs:
         run: nohup python app.py &
 
       - name: Sleep for 4 hours
-        run: sleep 4h
+        run: sleep infinity
