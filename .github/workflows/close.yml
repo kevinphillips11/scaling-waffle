@@ -1,0 +1,36 @@
+name: Close and Trigger New News Workflow
+
+on:
+  workflow_dispatch
+
+jobs:
+  close-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get workflow runs
+        id: get_runs
+        run: |
+          runs=$(gh workflow run list -w news.yml -R ${{ github.repository }} --json id --query '[].id' --state running)
+          echo "Running workflow runs: $runs"
+          echo "::set-output name=runs::$runs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Close running workflows
+        if: steps.get_runs.outputs.runs != 'null'
+        run: |
+          for run_id in $(echo ${{ steps.get_runs.outputs.runs }} | jq -r '.[]'); do
+            gh workflow run cancel $run_id -R ${{ github.repository }}
+            echo "Closed workflow run: $run_id"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  trigger-new-news-workflow:
+    needs: close-workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger new news workflow
+        run: gh workflow run news.yml -R ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
