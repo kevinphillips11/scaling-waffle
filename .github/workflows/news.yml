@@ -36,6 +36,9 @@ jobs:
       - name: Authenticate ngrok
         run: ngrok config add-authtoken $NGROK_TOKEN
 
+      - name: Execute shutdown.py
+        run: python shutdown.py
+
       - name: Start ngrok
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
