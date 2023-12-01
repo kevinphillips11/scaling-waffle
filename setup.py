@@ -3,6 +3,7 @@
 import subprocess
 import os
 import time
+import sys
 
 def checkout_repository():
     subprocess.run(['git', 'clone', os.getenv('GITHUB_REPOSITORY')])
@@ -24,7 +25,11 @@ def run_app_forever():
     subprocess.Popen(['nohup', 'python', 'app.py'])
 
 if __name__ == '__main__':
-    ngrok_token = os.getenv('NGROK_TOKEN')
+    if len(sys.argv) != 2:
+        print("Usage: python setup.py <ngrok_token>")
+        sys.exit(1)
+
+    ngrok_token = sys.argv[1]
 
     checkout_repository()
     set_up_python()
