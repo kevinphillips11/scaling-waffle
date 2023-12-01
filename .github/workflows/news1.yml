@@ -1,0 +1,24 @@
+name: Run App Forever
+
+on:
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  run-app:
+    runs-on: ubuntu-latest
+
+    env:
+      NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      LASTMILEAI_API_KEY: ${{ secrets.LASTMILEAI_API_KEY }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # Specify your Python version
+
+      - name: Run Setup Script
+        run: python setup.py ${{ secrets.REPO_URL }} ${{ secrets.NGROK_TOKEN }}
