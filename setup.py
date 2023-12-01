@@ -18,6 +18,8 @@ def install_ngrok():
     subprocess.run(['sudo', 'snap', 'install', 'ngrok'])
 
 def authenticate_ngrok(ngrok_token):
+    # Set NGROK_HOME to a directory where the runner has write permissions
+    os.environ['NGROK_HOME'] = '/home/runner/ngrok_home'
     subprocess.run(['ngrok', 'authtoken', ngrok_token])
 
 def start_ngrok():
