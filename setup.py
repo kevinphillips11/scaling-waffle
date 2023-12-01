@@ -23,9 +23,6 @@ def start_ngrok():
 def run_app_forever():
     subprocess.Popen(['nohup', 'python', 'app.py'])
 
-def sleep_forever():
-    time.sleep(float('inf'))
-
 if __name__ == '__main__':
     ngrok_token = os.getenv('NGROK_TOKEN')
 
@@ -36,4 +33,6 @@ if __name__ == '__main__':
     authenticate_ngrok(ngrok_token)
     start_ngrok()
     run_app_forever()
-    sleep_forever()
+
+    while True:
+        time.sleep(1)
