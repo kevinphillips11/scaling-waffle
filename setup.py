@@ -2,11 +2,10 @@
 
 import subprocess
 import os
-import sys
 import time
 
-def checkout_repository(repo_url):
-    subprocess.run(['git', 'clone', repo_url])
+def checkout_repository():
+    subprocess.run(['git', 'clone', os.getenv('GITHUB_REPOSITORY')])
 
 def set_up_python():
     subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
@@ -37,14 +36,9 @@ def sleep_forever():
     time.sleep(float('inf'))
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print("Usage: python setup.py <repository_url> <ngrok_token>")
-        sys.exit(1)
+    ngrok_token = os.getenv('NGROK_TOKEN')
 
-    repo_url = sys.argv[1]
-    ngrok_token = sys.argv[2]
-
-    checkout_repository(repo_url)
+    checkout_repository()
     set_up_python()
     install_ngrok()
     
