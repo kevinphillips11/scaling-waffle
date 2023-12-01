@@ -12,19 +12,10 @@ def set_up_python():
     subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 
 def install_ngrok():
-    subprocess.run([
-        'curl', '-s', 'https://ngrok-agent.s3.amazonaws.com/ngrok.asc', '|',
-        'sudo', 'tee', '/etc/apt/trusted.gpg.d/ngrok.asc', '>/dev/null'
-    ])
-    subprocess.run([
-        'echo', '"deb https://ngrok-agent.s3.amazonaws.com buster main"',
-        '|', 'sudo', 'tee', '/etc/apt/sources.list.d/ngrok.list'
-    ])
-    subprocess.run(['sudo', 'apt', 'update'])
-    subprocess.run(['sudo', 'apt', 'install', 'ngrok'])
+    subprocess.run(['sudo', 'snap', 'install', 'ngrok'])
 
 def authenticate_ngrok(ngrok_token):
-    subprocess.run(['ngrok', 'config', 'add-authtoken', ngrok_token])
+    subprocess.run(['ngrok', 'authtoken', ngrok_token])
 
 def start_ngrok():
     subprocess.Popen(['ngrok', 'http', '--domain=handy-labrador-humane.ngrok-free.app', '5000'])
