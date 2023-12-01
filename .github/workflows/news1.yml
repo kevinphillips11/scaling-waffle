@@ -21,4 +21,4 @@ jobs:
           python-version: 3.x  # Specify your Python version
 
       - name: Run Setup Script
-        run: python setup.py ${{ secrets.REPO_URL }} ${{ secrets.NGROK_TOKEN }}
+        run: python setup.py
