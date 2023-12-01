@@ -6,7 +6,9 @@ import time
 import sys
 
 def checkout_repository():
-    subprocess.run(['git', 'clone', os.getenv('GITHUB_REPOSITORY')])
+    repo_url = os.getenv('GITHUB_REPOSITORY')
+    print(f"Repository URL: {repo_url}")
+    subprocess.run(['git', 'clone', repo_url])
 
 def set_up_python():
     subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
