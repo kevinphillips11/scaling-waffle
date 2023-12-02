@@ -45,7 +45,7 @@ jobs:
       - name: Check App Status
         run: |
           # Add a command to check if your app is running, e.g., by making an HTTP request.
-          # Replace the placeholder URL with the appropriate endpoint or port.
-          until curl -s -o /dev/null http://localhost:5000; do
+          # Replace the placeholder URL with the appropriate endpoint.
+          until curl -s -o /dev/null https://handy-labrador-humane.ngrok-free.app/; do
             sleep 5
           done
