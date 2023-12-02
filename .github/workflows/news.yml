@@ -1,4 +1,4 @@
-name: Run App Forever
+name: Run App and Sleep Forever
 
 on:
   workflow_dispatch: # Manual trigger
@@ -24,6 +24,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Install ngrok
         run: |
           curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
@@ -38,8 +39,7 @@ jobs:
       - name: Start ngrok
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
-      - name: Run App Forever
-        run: nohup python app.py &
-
-      - name: Sleep Forever
-        run: sleep infinity
+      - name: Run App and Sleep Forever
+        run: |
+          nohup python app.py &
+          nohup python sleep.py &
