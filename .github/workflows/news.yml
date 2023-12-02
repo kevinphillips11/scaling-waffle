@@ -24,7 +24,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
       - name: Install ngrok
         run: |
           curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
@@ -32,20 +31,15 @@ jobs:
             echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | \
             sudo tee /etc/apt/sources.list.d/ngrok.list && \
             sudo apt update && sudo apt install ngrok
-
+          
       - name: Authenticate ngrok
         run: ngrok config add-authtoken $NGROK_TOKEN
 
       - name: Start ngrok
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
-      - name: Run App
+      - name: Run App Forever
         run: nohup python app.py &
 
-      - name: Check App Status
-        run: |
-          # Add a command to check if your app is running, e.g., by making an HTTP request.
-          # Replace the placeholder URL with the appropriate endpoint.
-          until curl -s -o /dev/null https://handy-labrador-humane.ngrok-free.app/; do
-            sleep 5
-          done
+      - name: Sleep Forever
+        run: sleep infinity
