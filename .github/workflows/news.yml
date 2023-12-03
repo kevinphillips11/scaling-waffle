@@ -35,6 +35,9 @@ jobs:
       - name: Authenticate ngrok
         run: ngrok config add-authtoken $NGROK_TOKEN
 
+      - name: Stop existing ngrok tunnels
+        run: pkill -f "ngrok" || true
+
       - name: Start ngrok
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
