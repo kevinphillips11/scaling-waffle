@@ -1,41 +1,26 @@
-name: Check and Run news.yml
+name: Stop and Run news.yml
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *' # Runs every hour
+    - cron: '0 * * * *'
 
 jobs:
-  stop-and-run-news:
+  stop-workflows:
+    name: Stop workflows
     runs-on: ubuntu-latest
     steps:
-      - name: Check for running workflows
-        id: check
+      - name: Cancel running workflows
         uses: styfle/cancel-workflow-action@0.9.1
         with:
-          access_token: ${{ github.token }}
-          workflow_id: news.yml
-
-      - name: Wait for workflows to finish
-        run: |
-          while [ "${{ steps.check.outputs.running_workflows }}" != "0" ]; do
-            echo 'Waiting for other workflows to finish...'
-            sleep 15
-          done
-          
-      - name: Recheck running workflows
-        id: recheck
-        run: |
-          echo 'Rechecking running workflows...'
-          resp=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/runs?status=in_progress&workflow_id=news.yml" \
-          -H "Authorization: Bearer ${{ github.token }}")
-          count=$(echo "$resp" | jq '.total_count')
-          if [ "$count" != "0" ]; then
-            exit 1
-          fi
-          
-      - name: Trigger new news.yml workflow
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow_id: ID_OF_NEWS.yml_WORKFLOW
+  trigger-new-run:
+    name: Trigger new run
+    needs: stop-workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger new run of news.yml
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: news.yml
