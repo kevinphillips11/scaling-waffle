@@ -12,9 +12,9 @@ def trigger_workflow(username, repo_name, workflow_id, token, artist_name):
     
     payload = {
         "ref": "main",
-        "inputs": {
-            "artist_name": artist_name,
-        }
+        # "inputs": {
+        #     "artist_name": artist_name,
+        # }
     }
     
     response = requests.post(api_url, headers=headers, json=payload)
