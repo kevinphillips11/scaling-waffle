@@ -1,4 +1,5 @@
 import requests
+import os
 
 def trigger_workflow(username, repo_name, workflow_id, token, artist_name):
     api_url = f"https://api.github.com/repos/{username}/{repo_name}/actions/workflows/{workflow_id}/dispatches"
@@ -28,7 +29,7 @@ def trigger_workflow(username, repo_name, workflow_id, token, artist_name):
 username = "kevinphillips11"
 repo_name = "didactic-waddle"
 workflow_id = "main.yml"
-token = "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"
+token = os.environ['GITHUB_TOKEN']
 artist_name = "john frusciante"
 
 trigger_workflow(username, repo_name, workflow_id, token, artist_name)
