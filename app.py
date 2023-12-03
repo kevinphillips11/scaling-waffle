@@ -4,7 +4,7 @@ import requests
 import os
 from lastmileai import LastMile
 import signal
-
+import time
 
 lastmile = LastMile(api_key=os.environ["LASTMILEAI_API_KEY"])
 
@@ -23,7 +23,6 @@ def close_the_app():
     else:
         return 'Invalid token'
 
-
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
     data = request.get_json()
@@ -35,7 +34,6 @@ def chat_completions():
       }
     )
     return completion["completionResponse"]["choices"][0]["message"]["content"]
-
 
 @app.route('/')
 def index():
@@ -50,4 +48,11 @@ def index():
     return render_template('index.html', articles=articles)
 
 if __name__ == '__main__':
+    # Run the server
     app.run(debug=True)
+
+    # Allow the server to run for 5 minutes
+    time.sleep(300)
+
+    # After 5 minutes, shut down the server
+    os.kill(os.getpid(), signal.SIGINT)
