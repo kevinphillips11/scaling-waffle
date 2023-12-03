@@ -44,10 +44,8 @@ jobs:
           gunicorn -w 4 -b 0.0.0.0:5000 app:app &
           sleep 1m  # Adjust the sleep duration as needed
           pkill -f "gunicorn" || true  # Kill the Gunicorn process after the sleep duration
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        
       - name: Run trigger.py
         run: python trigger.py
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
