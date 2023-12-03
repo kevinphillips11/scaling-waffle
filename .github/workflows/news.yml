@@ -40,7 +40,7 @@ jobs:
         run: ngrok http --domain=handy-labrador-humane.ngrok-free.app 5000 &
 
       - name: Run Flask App
-        run: gunicorn -w 4 -b 0.0.0.0:5000 app:app
+        run: timeout 5m gunicorn -w 4 -b 0.0.0.0:5000 app:app
 
       - name: Run trigger.py
         env:
