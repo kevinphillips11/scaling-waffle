@@ -42,7 +42,7 @@ jobs:
       - name: Run Flask App with Gunicorn
         run: |
           gunicorn -w 4 -b 0.0.0.0:5000 app:app &
-          sleep 1m  # Adjust the sleep duration as needed
+          sleep 3h  # Adjust the sleep duration as needed
           pkill -f "gunicorn" || true  # Kill the Gunicorn process after the sleep duration
         
       - name: Run trigger.py
