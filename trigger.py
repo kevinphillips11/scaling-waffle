@@ -27,7 +27,7 @@ def trigger_workflow(username, repo_name, workflow_id, token, artist_name):
 
 # Replace these values with your actual GitHub information
 username = "kevinphillips11"
-repo_name = "didactic-waddle"
+repo_name = "scaling-waffle"
 workflow_id = "news.yml"
 token = os.environ['PAT_TOKEN']
 artist_name = "john frusciante"
