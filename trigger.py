@@ -29,7 +29,7 @@ def trigger_workflow(username, repo_name, workflow_id, token, artist_name):
 username = "kevinphillips11"
 repo_name = "didactic-waddle"
 workflow_id = "main.yml"
-token = os.environ['GITHUB_TOKEN']
+token = os.environ['PAT_TOKEN']
 artist_name = "john frusciante"
 
 trigger_workflow(username, repo_name, workflow_id, token, artist_name)
