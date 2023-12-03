@@ -1,34 +1,38 @@
-name: Check and Trigger News Workflow
+name: Check and Run news.yml
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 */1 * * *'  # Run every hour, adjust as needed
+    - cron: '0 * * * *' # Runs every hour
 
 jobs:
-  check_and_trigger:
-    runs-on: ubuntu-latest
-
+  stop-and-run-news:
+    runs_on: ubuntu-latest
     steps:
-      - name: Check if News Workflow is running
-        id: check_news_status
-        run: |
-          RUNNING_WORKFLOW=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                              "https://api.github.com/repos/${{ github.repository }}/actions/runs?event=workflow_dispatch" \
-                              | jq '.workflow_runs | .[] | select(.name == "News Workflow" and .status == "in_progress")')
+      - name: Check for running workflows
+        id: check
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+          workflow_id: news.yml
 
-          if [ -z "$RUNNING_WORKFLOW" ]; then
-            echo "News Workflow is not running. Triggering a new run."
-            echo "::set-output name=trigger_run::true"
-          else
-            echo "News Workflow is already running. Skipping trigger."
-            echo "::set-output name=trigger_run::false"
-          fi
-
-      - name: Trigger News Workflow
-        if: steps.check_news_status.outputs.trigger_run == 'true'
+      - name: Wait for workflows to finish
         run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/news.yml/dispatches" \
-            -d '{"ref":"main"}'
+          while [ "${{ steps.check.outputs.running_workflows }}" != "0" ]; do
+            echo 'Waiting for other workflows to finish...'
+            sleep 15
+            # Recheck the number of running workflows
+            echo 'Rechecking running workflows...'
+            steps:
+            - id: recheck
+              uses: styfle/cancel-workflow-action@0.9.1
+              with:
+                access_token: ${{ github.token }}
+                workflow_id: news.yml
+          done
+
+      - name: Trigger new news.yml workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: news.yml
+          token: ${{ secrets.GITHUB_TOKEN }}
