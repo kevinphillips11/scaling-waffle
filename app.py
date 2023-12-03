@@ -13,18 +13,27 @@ CORS(app)
 
 NEWS_API_KEY = "b5b9a807cf6649128b07b112213b234d"  # Replace with your News API key
 
+# Flag to track whether the server should be shut down
+shutdown_flag = False
+
+def shutdown_server():
+    print('Shutting down...')
+    os.kill(os.getpid(), signal.SIGINT)
+
 @app.route('/close_the_app')
 def close_the_app():
     token = request.args.get('token')
     if token == 'johnlocke':
-        print('Shutting down...')
-        os.kill(os.getpid(), signal.SIGINT)
-        return 'Server shutting down...'
+        global shutdown_flag
+        shutdown_flag = True
+        return 'Server will shut down after processing current requests...'
     else:
         return 'Invalid token'
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
+    if shutdown_flag:
+        shutdown_server()
     data = request.get_json()
     messages = data['messages']
     completion = lastmile.create_openai_chat_completion(
@@ -45,14 +54,19 @@ def index():
     # Extract relevant information from the response
     articles = news_data.get('articles', [])
 
+    if shutdown_flag:
+        shutdown_server()
+
     return render_template('index.html', articles=articles)
 
 if __name__ == '__main__':
-    # Run the server
     app.run(debug=True)
 
     # Allow the server to run for 5 minutes
-    time.sleep(300)
+    start_time = time.time()
+    while time.time() - start_time < 300 and not shutdown_flag:
+        time.sleep(1)
 
-    # After 5 minutes, shut down the server
-    os.kill(os.getpid(), signal.SIGINT)
+    # After 5 minutes or if the shutdown flag is set, shut down the server
+    if not shutdown_flag:
+        shutdown_server()
